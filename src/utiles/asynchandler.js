@@ -1,5 +1,5 @@
 const asynchandaler = (requesthandaler) => {
-  (req, res, next) => {
+  return (req, res, next) => {
     Promise.resolve(requesthandaler(req, res, next)).catch((error) => next(error));
   };
 };
