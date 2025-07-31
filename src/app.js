@@ -27,9 +27,9 @@ app.use(cookieParser());
 import userRouter from './routes/user.routes.js';
 
 // route declaration
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1/user", userRouter);
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running at : ${process.env.PORT}`);
 });
 export default app;
