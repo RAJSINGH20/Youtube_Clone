@@ -18,6 +18,9 @@ app.use(cookieParser())
 // Importing routes
 import userRouter from './routes/user.routes.js';
 
+
+app.use(express.json()); // For parsing JSON request bodies
+app.use(express.urlencoded({ extended: true })); // For parsing form data (optional)
 // route declaration
 app.use("/api/v1/users", userRouter);
 
