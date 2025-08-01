@@ -1,51 +1,31 @@
-import { v2 as cloudinary } from 'cloudinary';
-import fs from "fs";
+import {v2 as cloudinary} from "cloudinary"
+import fs from "fs"
 
-const Cloudinary= async () => {
-    // Configuration
-    cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUDNNAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-    });
 
-    // Upload an image
-    const uploadOnCloudinary = async (localfilepath) => {
-        try {
-            if (!localfilepath) return null;
-            const response = await cloudinary.uploader.upload(localfilepath, {
-                resource_type: "auto",
-            });
-            // Remove the local file after uploading
-            console.log("File uploaded successfully:", response.url);
-            return response;
-        } catch (error) {
-            fs.unlinkSync(localfilepath); // Delete the file if upload fails
-            console.error("Error uploading to Cloudinary:", error);
-            return null;
-        }
-    };
+cloudinary.config({ 
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET 
+});
 
-    console.log(uploadOnCloudinary);
+const uploadOnCloudinary = async (localFilePath) => {
+    try {
+        if (!localFilePath) return null
+        //upload the file on cloudinary
+        const response = await cloudinary.uploader.upload(localFilePath, {
+            resource_type: "auto"
+        })
+        // file has been uploaded successfull
+        //console.log("file is uploaded on cloudinary ", response.url);
+        fs.unlinkSync(localFilePath)
+        return response;
 
-    // Optimize delivery by resizing and applying auto-format and auto-quality
-    const optimizeUrl = cloudinary.url("shoes", {
-        fetch_format: "auto",
-        quality: "auto",
-    });
+    } catch (error) {
+        fs.unlinkSync(localFilePath) // remove the locally saved temporary file as the upload operation got failed
+        return null;
+    }
+}
 
-    console.log(optimizeUrl);
 
-    // Transform the image: auto-crop to square aspect_ratio
-    const autoCropUrl = cloudinary.url("shoes", {
-        crop: "auto",
-        gravity: "auto",
-        width: 500,
-        height: 500,
-    });
 
-    console.log(autoCropUrl);
-};
-
-// Export the arrow function
-export default Cloudinary;
+export {uploadOnCloudinary}

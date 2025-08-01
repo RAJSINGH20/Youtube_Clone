@@ -1,23 +1,37 @@
-import registeruser from "../controllers/user.control.js";
-import router from "express";
-import { upload } from "../middlewares/multer.midleware.js";
-const Router = router();
+import { Router } from "express";
+import { 
+    loginUser, 
+    logoutUser, 
+    registerUser, 
+    refreshAccessToken, 
+    changeCurrentPassword, 
+    getCurrentUser, 
+    updateUserAvatar, 
+    updateUserCoverImage, 
+    getUserChannelProfile, 
+    getWatchHistory, 
+    updateAccountDetails
+} from "../controllers/user.control.js";
+import {upload} from "../middlewares/multer.midleware.js"
 
-Router.post("/register", registeruser).post(
+
+
+const router = Router()
+
+router.route("/register").post(
     upload.fields([
         {
-            name: "avatar", 
+            name: "avatar",
             maxCount: 1
-        },
+        }, 
         {
-            name: "coverimg",
+            name: "coverImage",
             maxCount: 1
-        },
-        {
-            
         }
     ]),
-); // POST /api/v1/users/register
+    registerUser
+    )
 
 
-export default Router;
+
+export default router

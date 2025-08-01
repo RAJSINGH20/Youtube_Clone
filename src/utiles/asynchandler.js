@@ -1,18 +1,27 @@
-const asynchandaler = (requesthandaler) => {
-  return (req, res, next) => {
-    Promise.resolve(requesthandaler(req, res, next)).catch((error) => next(error));
-  };
-};
+const asyncHandler = (requestHandler) => {
+    return (req, res, next) => {
+        Promise.resolve(requestHandler(req, res, next)).catch((err) => next(err))
+    }
+}
 
-export default asynchandaler;
 
-// const asynchandaler = (fn) => ()=> {}
-// const asynchandler = (fn) => () =>{}
-// const asynchandler = (fn) => async() =>{}
-// const asynchandler = (fn) => async(req, res ,next) =>{
+export { asyncHandler }
+
+
+
+
+// const asyncHandler = () => {}
+// const asyncHandler = (func) => () => {}
+// const asyncHandler = (func) => async () => {}
+
+
+// const asyncHandler = (fn) => async (req, res, next) => {
 //     try {
-//         await fn(req, res, next);
+//         await fn(req, res, next)
 //     } catch (error) {
-//         next(error);
+//         res.status(err.code || 500).json({
+//             success: false,
+//             message: err.message
+//         })
 //     }
 // }
