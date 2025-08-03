@@ -1,53 +1,35 @@
-// require('dotenv').config({path: './env'})
-import dotenv from "dotenv"
-import connectDB from "./db/index.js";
-import app from './app.js'
-dotenv.config({
-    path: './.env'
-})
+// Load environment variables FIRST
+import dotenv from 'dotenv';
+dotenv.config();
 
+import connectDB from './src/db/index.js';
+import app from './src/app.js';
 
+const PORT = process.env.PORT || 3000;
 
+// Debug environment variables
+console.log("🔍 Environment Check:");
+console.log("- PORT:", process.env.PORT);
+console.log("- MongoDB URI exists:", !!process.env.MONGODB_URI);
+console.log("- CORS Origin:", process.env.CORS_ORIGIN);
+
+// Connect to database first, then start server
 connectDB()
-
-
 .then(() => {
-    app.listen(process.env.PORT || 3000, () => {
-        console.log(`⚙️ Server is running at port : ${process.env.PORT}`);
-    })
+    console.log("🎯 Starting server...");
+    
+    app.listen(PORT, () => {
+        console.log(`✅ Server running at: http://localhost:${PORT}`);
+        console.log(`🌍 CORS Origin: ${process.env.CORS_ORIGIN}`);
+        console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+    
+    app.on('error', (error) => {
+        console.log('❌ Server Error:', error);
+        throw error;
+    });
 })
 .catch((err) => {
-    console.log("MONGO db connection failed !!! ", err);
-})
-
-
-
-
-
-
-
-
-
-
-/*
-import express from "express"
-const app = express()
-( async () => {
-    try {
-        await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
-        app.on("errror", (error) => {
-            console.log("ERRR: ", error);
-            throw error
-        })
-
-        app.listen(process.env.PORT, () => {
-            console.log(`App is listening on port ${process.env.PORT}`);
-        })
-
-    } catch (error) {
-        console.error("ERROR: ", error)
-        throw err
-    }
-})()
-
-*/
+    console.log("💥 Failed to start application:", err);
+    process.exit(1);
+});
